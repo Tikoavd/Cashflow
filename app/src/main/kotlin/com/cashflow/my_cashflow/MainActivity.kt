@@ -17,8 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -70,8 +72,8 @@ class MainActivity : ComponentActivity() {
             val colors = when {
                 dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
                 dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
-                darkTheme -> MaterialTheme.colorScheme
-                else -> MaterialTheme.colorScheme
+                darkTheme -> darkColorScheme()
+                else -> lightColorScheme()
             }
             MaterialTheme(
                 colorScheme = colors
