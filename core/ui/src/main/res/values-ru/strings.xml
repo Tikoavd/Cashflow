@@ -1,0 +1,5 @@
+<resources>
+    <!-- Languages -->
+    <string name="english">English</string>
+    <string name="russian">Русский</string>
+</resources>
