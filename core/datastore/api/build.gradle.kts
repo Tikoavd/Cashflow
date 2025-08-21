@@ -4,3 +4,8 @@ plugins {
 android {
     namespace = "com.cashflow.datastore.api"
 }
+
+dependencies {
+    // Serialization
+    implementation(libs.kotlin.serialization)
+}

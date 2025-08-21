@@ -15,4 +15,5 @@ dependencies {
     implementation(project(":core:utils"))
     implementation(project(":core:request"))
     implementation(project(":core:datastore:api"))
+    implementation(project(":core:database:entities"))
 }

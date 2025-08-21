@@ -6,4 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface DataStoreService {
     fun getAppLanguage(): Flow<String>
     suspend fun saveAppLanguage(language: String)
+
+    fun getCashflow(): Flow<String>
+    suspend fun saveCashflow(cashflow: String)
 }

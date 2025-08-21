@@ -18,5 +18,8 @@ class DatabaseModule {
             .build()
 
     @Single
-    fun provideCashflowDao(database: AppDatabase) = database.cashflowDao()
+    fun provideBusinessDao(database: AppDatabase) = database.businessDao()
+    fun provideExpenseDao(database: AppDatabase) = database.expenseDao()
+    fun provideLiabilityDao(database: AppDatabase) = database.liabilityDao()
+    fun provideStockDao(database: AppDatabase) = database.stockDao()
 }

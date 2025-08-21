@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.cashflow.utils.DEFAULT_BOOLEAN
 import com.cashflow.utils.DEFAULT_FLOAT
@@ -57,6 +58,16 @@ internal class DataStoreServiceImpl(
     override suspend fun saveAppLanguage(language: String) {
         dataStore.edit { preferences ->
             preferences[stringPreferencesKey("app_language")] = language
+        }
+    }
+
+    override fun getCashflow(): Flow<String> = dataStore.data.map { preferences ->
+        preferences[stringPreferencesKey("cashflow")].orEmpty()
+    }
+
+    override suspend fun saveCashflow(cashflow: String) {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey("String")] = cashflow
         }
     }
 }
