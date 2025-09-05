@@ -48,7 +48,7 @@ class HomeViewModel(
 
         getTotalUseCase().onEach {
             onAction(HomeAction.UpdateTotal(it))
-        }.flowOn(dispatchers.io).launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
 
         viewState.map { it.cashflow }.debounce(500L).onEach {
             homeRepository.updateCashflow(it).flowOn(dispatchers.io).launchIn(viewModelScope)

@@ -19,7 +19,13 @@ class DatabaseModule {
 
     @Single
     fun provideBusinessDao(database: AppDatabase) = database.businessDao()
+
+    @Single
     fun provideExpenseDao(database: AppDatabase) = database.expenseDao()
+
+    @Single
     fun provideLiabilityDao(database: AppDatabase) = database.liabilityDao()
+
+    @Single
     fun provideStockDao(database: AppDatabase) = database.stockDao()
 }

@@ -7,6 +7,7 @@ import com.cashflow.utils.emitFlow
 import com.cashflow.utils.tryGetEnumValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
@@ -24,9 +25,17 @@ class DataStoreRepositoryImpl(
         dataStoreService.saveAppLanguage(language.name)
     }
 
+    @OptIn(InternalSerializationApi::class)
     override fun getCashflow(): Flow<CashflowDso> =
-        dataStoreService.getCashflow().map { json.decodeFromString(it) }
+        dataStoreService.getCashflow().map {
+            try {
+                json.decodeFromString(it)
+            } catch (_: Exception) {
+                CashflowDso()
+            }
+        }
 
+    @OptIn(InternalSerializationApi::class)
     override fun saveCashflow(cashflow: CashflowDso): Flow<Unit> = emitFlow {
         dataStoreService.saveCashflow(json.encodeToString(cashflow))
     }

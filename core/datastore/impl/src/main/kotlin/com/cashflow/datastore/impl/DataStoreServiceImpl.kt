@@ -67,7 +67,7 @@ internal class DataStoreServiceImpl(
 
     override suspend fun saveCashflow(cashflow: String) {
         dataStore.edit { preferences ->
-            preferences[stringPreferencesKey("String")] = cashflow
+            preferences[stringPreferencesKey("cashflow")] = cashflow
         }
     }
 }

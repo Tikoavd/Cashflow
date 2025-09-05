@@ -2,4 +2,37 @@
     <!-- Languages -->
     <string name="english">English</string>
     <string name="russian">Русский</string>
+
+    <!--   Home Screen -->
+    <string name="income_statement">ОТЧЕТ О ДОХОДАХ</string>
+    <string name="income">ДОХОД</string>
+    <string name="description">Описание</string>
+    <string name="cash_flow">Доход</string>
+    <string name="salary">Зарплата:</string>
+    <string name="interest_dividends">Проценты/Дивиденды:</string>
+    <string name="real_estate_business">Недвижимость/Бизнес:</string>
+    <string name="expenses">РАСХОДЫ</string>
+    <string name="payment">Платеж:</string>
+    <string name="child_expenses">Расходы на детей:</string>
+    <string name="balance_sheet_header">BALANCE SHEET</string>
+    <string name="assets">АКТИВЫ</string>
+    <string name="liabilities">ОБЯЗАТЕЛЬСТВА</string>
+    <string name="savings">Сбережения:</string>
+    <string name="stocks_funds_cds">Акции/фонды/ДС-ы:</string>
+    <string name="num_of_shares">Количество акций:</string>
+    <string name="cost_share">Стоимость/доля:</string>
+    <string name="down_pay">Аванс Оплата:</string>
+    <string name="cost">Стоимость:</string>
+    <string name="mortgage_liability">Ипотека/Обязательства:</string>
+    <string name="loan">Заем:</string>
+    <string name="auditor">Аудитор</string>
+    <string name="passive_income">Пассивный доход:</string>
+    <string name="passive_income_desc">(Денежный поток от процентов/дивидендов + недвижимость/бизнес)</string>
+    <string name="total_income">Общий доход:</string>
+    <string name="num_of_children">Количество детей:</string>
+    <string name="per_child_expense">Расходы на одного ребенка:</string>
+    <string name="total_expenses">Общие расходы:</string>
+    <string name="monthly_cash_flow">Ежемесячный денежный поток:</string>
+    <string name="monthly_cash_flow_desc">(Общий доход - Общие расходы)</string>
+
 </resources>

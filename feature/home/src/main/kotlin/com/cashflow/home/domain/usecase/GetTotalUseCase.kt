@@ -4,7 +4,7 @@ import com.cashflow.dispatchers.api.DispatchersProvider
 import com.cashflow.home.domain.repository.HomeRepository
 import com.cashflow.ui_model.cashflow.TotalUI
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Factory
@@ -19,18 +19,18 @@ class GetTotalUseCaseImpl(
     private val dispatchers: DispatchersProvider
 ) : GetTotalUseCase {
 
-    override fun invoke(): Flow<TotalUI> = repository.getCashflow().flatMapConcat { cashflow ->
+    override fun invoke(): Flow<TotalUI> = repository.getCashflow().flatMapLatest { cashflow ->
         var passiveIncome = 0
         var totalIncome = cashflow.salary
         val totalChildExpenses = cashflow.perChildExpense * cashflow.childCount
         var totalExpense = totalChildExpenses
         var totalLoan = 0
-        repository.getBusinesses().flatMapConcat { businesses ->
+        repository.getBusinesses().flatMapLatest { businesses ->
             passiveIncome += businesses.sumOf { it.income }
             totalLoan += businesses.sumOf { it.mortgage }
-            repository.getExpenses().flatMapConcat { expenses ->
+            repository.getExpenses().flatMapLatest { expenses ->
                 totalExpense += expenses.sumOf { it.expense }
-                repository.getLiabilities().flatMapConcat { liabilities ->
+                repository.getLiabilities().flatMapLatest { liabilities ->
                     totalLoan += liabilities.sumOf { it.cost }
                     totalExpense += liabilities.sumOf { it.payment }
                     repository.getStocks().map { stocks ->

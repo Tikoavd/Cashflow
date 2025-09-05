@@ -2,6 +2,7 @@ package com.cashflow.ui_model.cashflow
 
 import androidx.compose.runtime.Immutable
 import com.cashflow.datastore.api.models.CashflowDso
+import kotlinx.serialization.InternalSerializationApi
 
 @Immutable
 data class CashflowUI(
@@ -10,6 +11,7 @@ data class CashflowUI(
     val perChildExpense: Int = 0,
     val savings: Int = 0
 ) {
+    @OptIn(InternalSerializationApi::class)
     fun toDso() = CashflowDso(
         salary = salary,
         childCount = childCount,
@@ -17,6 +19,7 @@ data class CashflowUI(
     )
 }
 
+@OptIn(InternalSerializationApi::class)
 fun CashflowDso.toUI() = CashflowUI(
     salary = salary,
     childCount = childCount,
