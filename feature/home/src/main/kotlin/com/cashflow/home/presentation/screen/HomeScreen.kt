@@ -2,10 +2,8 @@ package com.cashflow.home.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,40 +13,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -59,16 +40,15 @@ import com.cashflow.home.presentation.components.BalanceSheetHeader
 import com.cashflow.home.presentation.components.ExpensesComponent
 import com.cashflow.home.presentation.components.IncomeComponent
 import com.cashflow.home.presentation.components.LiabilitiesComponent
-import com.cashflow.home.presentation.components.TitlePriceItem
 import com.cashflow.home.presentation.mvi.HomeIntent
 import com.cashflow.home.presentation.mvi.HomeState
+import com.cashflow.ui.R
 import com.cashflow.ui.extensions.collectEffects
 import com.cashflow.ui_model.cashflow.BusinessUI
 import com.cashflow.ui_model.cashflow.ExpenseUI
 import com.cashflow.ui_model.cashflow.LiabilityUI
 import com.cashflow.ui_model.cashflow.StockUI
 import org.koin.androidx.compose.koinViewModel
-import com.cashflow.ui.R
 
 @Composable
 fun HomeRoute() {
@@ -142,7 +122,7 @@ fun HomeScreen(
             )
         }
     Column(
-        modifier = Modifier
+        modifier = modifier
             .requiredWidth(screenWidthDp * 2)
             .requiredHeight(screenHeightDp * 2)
             .graphicsLayer(
@@ -189,7 +169,9 @@ fun HomeScreen(
                     modifier = Modifier.weight(1f),
                     childExpenses = state.total.totalChildExpenses,
                     expenses = state.expenses,
-                    liabilities = state.liabilities
+                    liabilities = state.liabilities,
+                    onUpsertExpense = onUpsertExpense,
+                    onDeleteExpense = onDeleteExpense
                 )
             }
 
@@ -219,14 +201,21 @@ fun HomeScreen(
                     savings = state.cashflow.savings,
                     stocks = state.stocks,
                     businesses = state.businesses,
-                    onSavingsChange = onSavingsChange
+                    onSavingsChange = onSavingsChange,
+                    onUpsertStock = onUpsertStock,
+                    onDeleteStock = onDeleteStock,
+                    onUpsertBusiness = onUpsertBusiness,
+                    onDeleteBusiness = onDeleteBusiness
                 )
 
                 LiabilitiesComponent(
                     modifier = Modifier.weight(1f),
+                    totalLoan = state.total.totalLoan.toString(),
                     liabilities = state.liabilities,
                     stocks = state.stocks,
-                    businesses = state.businesses
+                    businesses = state.businesses,
+                    onUpsertLiability = onUpsertLiability,
+                    onDeleteLiability = onDeleteLiability
                 )
             }
         }

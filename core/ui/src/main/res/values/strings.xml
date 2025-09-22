@@ -11,7 +11,9 @@
     <string name="salary">Salary:</string>
     <string name="interest_dividends">Interest/Dividends:</string>
     <string name="real_estate_business">Real Estate/Business:</string>
+    <string name="real_estate_business_label">Real Estate/Business</string>
     <string name="expenses">EXPENSES</string>
+    <string name="expense">EXPENSE</string>
     <string name="payment">Payment:</string>
     <string name="child_expenses">Child Expenses:</string>
     <string name="balance_sheet_header">BALANCE SHEET</string>
@@ -19,11 +21,13 @@
     <string name="liabilities">LIABILITIES</string>
     <string name="savings">Savings:</string>
     <string name="stocks_funds_cds">Stocks/Funds/CDs:</string>
+    <string name="stock_fund_cd">Stock/Fund/CD</string>
     <string name="num_of_shares"># of Shares:</string>
     <string name="cost_share">Cost/Share:</string>
     <string name="down_pay">Down Pay:</string>
     <string name="cost">Cost:</string>
     <string name="mortgage_liability">Mortgage/Liability:</string>
+    <string name="mortgage_liability_label">Mortgage/Liability</string>
     <string name="loan">Loan:</string>
     <string name="auditor">Auditor</string>
     <string name="passive_income">Passive Income:</string>
@@ -34,5 +38,15 @@
     <string name="total_expenses">Total Expenses:</string>
     <string name="monthly_cash_flow">Monthly Cash Flow:</string>
     <string name="monthly_cash_flow_desc">(Total Income - Total Expenses)</string>
+
+    <string name="name">Name</string>
+    <string name="monthly_expense">Monthly expense</string>
+    <string name="quantity">Quantity</string>
+    <string name="price">Price</string>
+    <string name="income_label">Income</string>
+    <string name="mortgage">Mortgage</string>
+    <string name="down_pay_label">Down pay</string>
+    <string name="cost_label">Cost</string>
+    <string name="payment_label">Payment</string>
 
 </resources>

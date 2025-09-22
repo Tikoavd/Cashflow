@@ -15,7 +15,8 @@ data class CashflowUI(
     fun toDso() = CashflowDso(
         salary = salary,
         childCount = childCount,
-        perChildExpense = perChildExpense
+        perChildExpense = perChildExpense,
+        savings = savings
     )
 }
 

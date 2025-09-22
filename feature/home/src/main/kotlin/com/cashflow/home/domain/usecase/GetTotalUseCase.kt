@@ -20,23 +20,18 @@ class GetTotalUseCaseImpl(
 ) : GetTotalUseCase {
 
     override fun invoke(): Flow<TotalUI> = repository.getCashflow().flatMapLatest { cashflow ->
-        var passiveIncome = 0
-        var totalIncome = cashflow.salary
-        val totalChildExpenses = cashflow.perChildExpense * cashflow.childCount
-        var totalExpense = totalChildExpenses
-        var totalLoan = 0
         repository.getBusinesses().flatMapLatest { businesses ->
-            passiveIncome += businesses.sumOf { it.income }
-            totalLoan += businesses.sumOf { it.mortgage }
             repository.getExpenses().flatMapLatest { expenses ->
-                totalExpense += expenses.sumOf { it.expense }
                 repository.getLiabilities().flatMapLatest { liabilities ->
-                    totalLoan += liabilities.sumOf { it.cost }
-                    totalExpense += liabilities.sumOf { it.payment }
                     repository.getStocks().map { stocks ->
-                        passiveIncome += stocks.sumOf { it.income }
-                        totalLoan += stocks.sumOf { it.mortgage }
-                        totalIncome += passiveIncome
+                        val totalChildExpenses = cashflow.perChildExpense * cashflow.childCount
+                        val totalExpense = totalChildExpenses + expenses.sumOf { it.expense } +
+                                liabilities.sumOf { it.payment }
+                        val passiveIncome =
+                            businesses.sumOf { it.income } + stocks.sumOf { it.income }
+                        val totalIncome = passiveIncome + cashflow.salary
+                        val totalLoan = businesses.sumOf { it.mortgage } +
+                                liabilities.sumOf { it.cost } + stocks.sumOf { it.mortgage }
                         TotalUI(
                             passiveIncome = passiveIncome,
                             totalIncome = totalIncome,

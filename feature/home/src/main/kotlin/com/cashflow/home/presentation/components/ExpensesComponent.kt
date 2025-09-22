@@ -2,6 +2,7 @@ package com.cashflow.home.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,10 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,8 +34,12 @@ fun ExpensesComponent(
     modifier: Modifier = Modifier,
     childExpenses: Int,
     expenses: SnapshotStateList<ExpenseUI>,
-    liabilities: SnapshotStateList<LiabilityUI>
+    liabilities: SnapshotStateList<LiabilityUI>,
+    onUpsertExpense: (expense: ExpenseUI) -> Unit,
+    onDeleteExpense: (expense: ExpenseUI) -> Unit
 ) {
+    var editExpense by remember { mutableStateOf<ExpenseUI?>(null) }
+
     Column(
         modifier = modifier
     ) {
@@ -44,23 +53,6 @@ fun ExpensesComponent(
         )
 
         LazyColumn {
-            items(liabilities) { liability ->
-                if (liability.cost != 0) {
-                    TitlePriceItem(
-                        title = liability.name,
-                        price = liability.cost.toString(),
-                        currency = "$"
-                    )
-                }
-            }
-            items(expenses) { expense ->
-                TitlePriceItem(
-                    //TODO add on click edit
-                    title = expense.name,
-                    price = expense.expense.toString(),
-                    currency = "$"
-                )
-            }
             if (childExpenses != 0) {
                 item {
                     TitlePriceItem(
@@ -69,6 +61,23 @@ fun ExpensesComponent(
                         currency = "$"
                     )
                 }
+            }
+            items(liabilities) { liability ->
+                if (liability.cost != 0) {
+                    TitlePriceItem(
+                        title = liability.name,
+                        price = liability.payment.toString(),
+                        currency = "$"
+                    )
+                }
+            }
+            items(expenses) { expense ->
+                TitlePriceItem(
+                    modifier = Modifier.clickable { editExpense = expense },
+                    title = expense.name,
+                    price = expense.expense.toString(),
+                    currency = "$"
+                )
             }
             if (liabilities.size + expenses.size < 4) {
                 items(5 - (liabilities.size + expenses.size)) {
@@ -80,14 +89,14 @@ fun ExpensesComponent(
                 }
             }
             item {
-                //TODO add on add click
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp, horizontal = 8.dp)
                         .border(width = 1.dp, color = colorScheme.onBackground)
                         .background(colorScheme.primary)
-                        .padding(vertical = 4.dp),
+                        .padding(vertical = 4.dp)
+                        .clickable { editExpense = ExpenseUI() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -99,5 +108,21 @@ fun ExpensesComponent(
                 }
             }
         }
+    }
+
+    editExpense?.let { expense ->
+        AddEditExpenseDialog(
+            expense = expense,
+            onDismiss = { editExpense = null },
+            onExpenseChange = { editExpense = it },
+            onSuccess = {
+                onUpsertExpense(expense)
+                editExpense = null
+            },
+            onDelete = {
+                onDeleteExpense(expense)
+                editExpense = null
+            }
+        )
     }
 }

@@ -11,7 +11,9 @@
     <string name="salary">Зарплата:</string>
     <string name="interest_dividends">Проценты/Дивиденды:</string>
     <string name="real_estate_business">Недвижимость/Бизнес:</string>
+    <string name="real_estate_business_label">Недвижимость/Бизнес</string>
     <string name="expenses">РАСХОДЫ</string>
+    <string name="expense">РАСХОД</string>
     <string name="payment">Платеж:</string>
     <string name="child_expenses">Расходы на детей:</string>
     <string name="balance_sheet_header">BALANCE SHEET</string>
@@ -19,11 +21,13 @@
     <string name="liabilities">ОБЯЗАТЕЛЬСТВА</string>
     <string name="savings">Сбережения:</string>
     <string name="stocks_funds_cds">Акции/фонды/ДС-ы:</string>
+    <string name="stock_fund_cd">Акция/фонд/ДС</string>
     <string name="num_of_shares">Количество акций:</string>
     <string name="cost_share">Стоимость/доля:</string>
     <string name="down_pay">Аванс Оплата:</string>
     <string name="cost">Стоимость:</string>
     <string name="mortgage_liability">Ипотека/Обязательства:</string>
+    <string name="mortgage_liability_label">Ипотека/Обязательство</string>
     <string name="loan">Заем:</string>
     <string name="auditor">Аудитор</string>
     <string name="passive_income">Пассивный доход:</string>
@@ -34,5 +38,15 @@
     <string name="total_expenses">Общие расходы:</string>
     <string name="monthly_cash_flow">Ежемесячный денежный поток:</string>
     <string name="monthly_cash_flow_desc">(Общий доход - Общие расходы)</string>
+
+    <string name="name">Название</string>
+    <string name="monthly_expense">Ежемесячный расход</string>
+    <string name="quantity">Количество</string>
+    <string name="price">Цена</string>
+    <string name="income_label">Доход</string>
+    <string name="mortgage">Заем</string>
+    <string name="down_pay_label">Взнос</string>
+    <string name="cost_label">Стоимость</string>
+    <string name="payment_label">Платеж</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.cashflow.home.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,10 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +45,15 @@ fun AssetsComponent(
     savings: Int,
     stocks: SnapshotStateList<StockUI>,
     businesses: SnapshotStateList<BusinessUI>,
-    onSavingsChange: (Int) -> Unit
+    onSavingsChange: (Int) -> Unit,
+    onUpsertStock: (stock: StockUI) -> Unit,
+    onDeleteStock: (stock: StockUI) -> Unit,
+    onUpsertBusiness: (business: BusinessUI) -> Unit,
+    onDeleteBusiness: (business: BusinessUI) -> Unit
 ) {
+    var editStock by remember { mutableStateOf<StockUI?>(null) }
+    var editBusiness by remember { mutableStateOf<BusinessUI?>(null) }
+
     Column(
         modifier = modifier
     ) {
@@ -154,7 +166,7 @@ fun AssetsComponent(
             LazyColumn {
                 items(stocks) { stock ->
                     StockBusinessComponent(
-                        //TODO add on click edit
+                        modifier = Modifier.clickable { editStock = stock },
                         name = stock.name,
                         quantity = stock.quantity.toString(),
                         price = "$" + stock.price
@@ -170,14 +182,14 @@ fun AssetsComponent(
                     }
                 }
                 item {
-                    //TODO add on add click
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .border(width = 1.dp, color = colorScheme.onBackground)
                             .background(colorScheme.primary)
-                            .padding(vertical = 4.dp),
+                            .padding(vertical = 4.dp)
+                            .clickable { editStock = StockUI() },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -244,7 +256,7 @@ fun AssetsComponent(
             LazyColumn {
                 items(businesses) { business ->
                     StockBusinessComponent(
-                        //TODO add on click edit
+                        modifier = Modifier.clickable { editBusiness = business },
                         name = business.name,
                         quantity = "$" + business.downPay,
                         price = "$" + business.cost
@@ -260,14 +272,14 @@ fun AssetsComponent(
                     }
                 }
                 item {
-                    //TODO add on add click
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .border(width = 1.dp, color = colorScheme.onBackground)
                             .background(colorScheme.primary)
-                            .padding(vertical = 4.dp),
+                            .padding(vertical = 4.dp)
+                            .clickable { editBusiness = BusinessUI() },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -280,5 +292,37 @@ fun AssetsComponent(
                 }
             }
         }
+    }
+
+    editStock?.let { stock ->
+        AddEditStockDialog(
+            stock = stock,
+            onDismiss = { editStock = null },
+            onStockChange = { editStock = it },
+            onSuccess = {
+                onUpsertStock(stock)
+                editStock = null
+            },
+            onDelete = {
+                onDeleteStock(stock)
+                editStock = null
+            }
+        )
+    }
+
+    editBusiness?.let { business ->
+        AddEditBusinessDialog(
+            business = business,
+            onDismiss = { editBusiness = null },
+            onBusinessChange = { editBusiness = it },
+            onSuccess = {
+                onUpsertBusiness(business)
+                editBusiness = null
+            },
+            onDelete = {
+                onDeleteBusiness(business)
+                editBusiness = null
+            }
+        )
     }
 }
