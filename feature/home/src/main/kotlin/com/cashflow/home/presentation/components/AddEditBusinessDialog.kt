@@ -37,6 +37,7 @@ import com.cashflow.ui_model.cashflow.BusinessUI
 fun AddEditBusinessDialog(
     modifier: Modifier = Modifier,
     business: BusinessUI,
+    currency: String,
     onDismiss: () -> Unit,
     onBusinessChange: (BusinessUI) -> Unit,
     onSuccess: () -> Unit,
@@ -116,7 +117,7 @@ fun AddEditBusinessDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -157,7 +158,7 @@ fun AddEditBusinessDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -198,7 +199,7 @@ fun AddEditBusinessDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -239,7 +240,7 @@ fun AddEditBusinessDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold

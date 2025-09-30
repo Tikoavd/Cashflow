@@ -1,5 +1,6 @@
 package com.cashflow.home.data.repository
 
+import android.icu.util.Currency
 import com.cashflow.database.BusinessDao
 import com.cashflow.database.ExpenseDao
 import com.cashflow.database.LiabilityDao
@@ -74,5 +75,16 @@ class HomeRepositoryImpl(
 
     override fun deleteStock(stock: StockUI): Flow<Unit> = emitFlow {
         stockDao.deleteStock(stock.toDbo())
+    }
+
+    override fun getCurrency(): Flow<String> =
+        dataStoreRepository.getCurrency().map { it.ifEmpty { "$" } }
+
+    override fun saveCurrency(currency: String): Flow<Unit> =
+        dataStoreRepository.saveCurrency(currency)
+
+    override fun getCurrencyList(): Flow<List<String>> = emitFlow {
+        Currency.getAvailableCurrencies().map { it.symbol }.filter { it.length == 1 } +
+                listOf("֏")
     }
 }

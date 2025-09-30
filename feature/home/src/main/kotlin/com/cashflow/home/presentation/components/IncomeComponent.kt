@@ -37,6 +37,7 @@ import com.cashflow.ui_model.cashflow.StockUI
 fun IncomeComponent(
     modifier: Modifier = Modifier,
     salary: Int,
+    currency: String,
     stocks: SnapshotStateList<StockUI>,
     businesses: SnapshotStateList<BusinessUI>,
     onSalaryChange: (Int) -> Unit
@@ -124,7 +125,7 @@ fun IncomeComponent(
                                 ) {
                                     Row {
                                         Text(
-                                            text = "$",
+                                            text = currency,
                                             style = typography.labelMedium.copy(color = colorScheme.onBackground),
                                             textAlign = TextAlign.Start
                                         )
@@ -157,7 +158,7 @@ fun IncomeComponent(
                     TitlePriceItem(
                         title = stock.name,
                         price = stock.income.toString(),
-                        currency = "$"
+                        currency = currency
                     )
                 }
             }
@@ -172,7 +173,7 @@ fun IncomeComponent(
                     TitlePriceItem(
                         title = business.name,
                         price = business.income.toString(),
-                        currency = "$"
+                        currency = currency
                     )
                 }
             }

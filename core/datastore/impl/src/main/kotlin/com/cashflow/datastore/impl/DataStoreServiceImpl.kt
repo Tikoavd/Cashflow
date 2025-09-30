@@ -70,4 +70,14 @@ internal class DataStoreServiceImpl(
             preferences[stringPreferencesKey("cashflow")] = cashflow
         }
     }
+
+    override fun getCurrency(): Flow<String> = dataStore.data.map { preferences ->
+        preferences[stringPreferencesKey("currency")].orEmpty()
+    }
+
+    override suspend fun saveCurrency(currency: String) {
+        dataStore.edit { preferences ->
+            preferences[stringPreferencesKey("currency")] = currency
+        }
+    }
 }

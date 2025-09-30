@@ -9,4 +9,8 @@ interface DataStoreService {
 
     fun getCashflow(): Flow<String>
     suspend fun saveCashflow(cashflow: String)
+
+    fun getCurrency(): Flow<String>
+
+    suspend fun saveCurrency(currency: String)
 }

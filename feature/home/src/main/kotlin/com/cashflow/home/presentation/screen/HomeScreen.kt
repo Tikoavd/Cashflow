@@ -4,28 +4,41 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -38,6 +51,7 @@ import com.cashflow.home.presentation.components.AssetsComponent
 import com.cashflow.home.presentation.components.AuditorComponent
 import com.cashflow.home.presentation.components.BalanceSheetHeader
 import com.cashflow.home.presentation.components.ExpensesComponent
+import com.cashflow.home.presentation.components.HomeTopBar
 import com.cashflow.home.presentation.components.IncomeComponent
 import com.cashflow.home.presentation.components.LiabilitiesComponent
 import com.cashflow.home.presentation.mvi.HomeIntent
@@ -79,9 +93,11 @@ fun HomeRoute() {
         onDeleteExpense = { expense -> viewModel.onIntent(HomeIntent.OnDeleteExpense(expense)) },
         onDeleteLiability = { liability -> viewModel.onIntent(HomeIntent.OnDeleteLiability(liability)) },
         onDeleteStock = { stock -> viewModel.onIntent(HomeIntent.OnDeleteStock(stock)) },
+        onUpdateCurrency = { currency -> viewModel.onIntent(HomeIntent.OnUpdateCurrency(currency)) }
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -97,15 +113,17 @@ fun HomeScreen(
     onDeleteBusiness: (business: BusinessUI) -> Unit,
     onDeleteExpense: (expense: ExpenseUI) -> Unit,
     onDeleteLiability: (liability: LiabilityUI) -> Unit,
-    onDeleteStock: (stock: StockUI) -> Unit
+    onDeleteStock: (stock: StockUI) -> Unit,
+    onUpdateCurrency: (currency: String) -> Unit
 ) {
 
     val config = LocalConfiguration.current
-    val screenWidthDp = config.screenWidthDp.dp
-    val screenHeightDp = config.screenHeightDp.dp
 
-    val screenWidth = with(LocalDensity.current) { screenWidthDp.toPx() }
-    val screenHeight = with(LocalDensity.current) { screenHeightDp.toPx() }
+    var screenWidth by remember { mutableIntStateOf(0) }
+    var screenHeight by remember { mutableIntStateOf(0) }
+
+    val screenWidthDp = with(LocalDensity.current) { screenWidth.toDp() }
+    val screenHeightDp = with(LocalDensity.current) { screenHeight.toDp() }
 
     var scale by remember { mutableFloatStateOf(0.5f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -121,102 +139,144 @@ fun HomeScreen(
                 y = newOffset.y.coerceIn((-screenHeight / 2) * mul, (screenHeight / 2) * mul)
             )
         }
-    Column(
-        modifier = modifier
-            .requiredWidth(screenWidthDp * 2)
-            .requiredHeight(screenHeightDp * 2)
-            .graphicsLayer(
-                scaleX = scale,
-                scaleY = scale,
-                translationX = offset.x,
-                translationY = offset.y
+
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            HomeTopBar(
+                modifier = Modifier.windowInsetsPadding(
+                    WindowInsets.systemBars.only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Top
+                    )
+                ),
+                currencies = state.currencies,
+                selectedCurrency = state.currency,
+                onUpdateCurrency = onUpdateCurrency
             )
-            .transformable(state = transformableState)
-            .background(colorScheme.background)
-            .padding(12.dp)
-    ) {
-        Text(
+        },
+        containerColor = colorScheme.background,
+        contentColor = colorScheme.onBackground,
+        contentWindowInsets = WindowInsets.systemBarsIgnoringVisibility
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            text = stringResource(R.string.income_statement),
-            style = typography.headlineLarge.copy(
-                color = colorScheme.onBackground,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Spacer(Modifier.height(4.dp))
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .onSizeChanged {
+                        screenWidth = it.width
+                        screenHeight = it.height
+                    }
+            )
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .border(width = 2.dp, color = colorScheme.onBackground)
+                    .requiredWidth(screenWidthDp * 2)
+                    .requiredHeight(screenHeightDp * 2)
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
+                        translationX = offset.x,
+                        translationY = offset.y
+                    )
+                    .transformable(state = transformableState)
+                    .background(colorScheme.background)
+                    .padding(12.dp)
             ) {
-                IncomeComponent(
-                    modifier = Modifier.weight(1f),
-                    salary = state.cashflow.salary,
-                    stocks = state.stocks,
-                    businesses = state.businesses,
-                    onSalaryChange = onSalaryChange
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    text = stringResource(R.string.income_statement),
+                    style = typography.headlineLarge.copy(
+                        color = colorScheme.onBackground,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .border(width = 2.dp, color = colorScheme.onBackground)
+                    ) {
+                        IncomeComponent(
+                            modifier = Modifier.weight(1f),
+                            salary = state.cashflow.salary,
+                            stocks = state.stocks,
+                            businesses = state.businesses,
+                            currency = state.currency,
+                            onSalaryChange = onSalaryChange
+                        )
 
-                ExpensesComponent(
-                    modifier = Modifier.weight(1f),
-                    childExpenses = state.total.totalChildExpenses,
-                    expenses = state.expenses,
-                    liabilities = state.liabilities,
-                    onUpsertExpense = onUpsertExpense,
-                    onDeleteExpense = onDeleteExpense
-                )
-            }
+                        ExpensesComponent(
+                            modifier = Modifier.weight(1f),
+                            childExpenses = state.total.totalChildExpenses,
+                            expenses = state.expenses,
+                            liabilities = state.liabilities,
+                            currency = state.currency,
+                            onUpsertExpense = onUpsertExpense,
+                            onDeleteExpense = onDeleteExpense
+                        )
+                    }
 
-            AuditorComponent(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .padding(start = 16.dp),
-                total = state.total,
-                cashflow = state.cashflow,
-                onChildCountChange = onChildCountChange,
-                onPerChildExpenseChange = onPerChildExpenseChange
-            )
-        }
+                    AuditorComponent(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(start = 16.dp),
+                        total = state.total,
+                        cashflow = state.cashflow,
+                        currency = state.currency,
+                        onChildCountChange = onChildCountChange,
+                        onPerChildExpenseChange = onPerChildExpenseChange
+                    )
+                }
 
-        Column(modifier = Modifier.weight(1f)) {
-            BalanceSheetHeader(monthlyCashFlow = state.total.totalCashflow)
+                Column(modifier = Modifier.weight(1f)) {
+                    BalanceSheetHeader(
+                        monthlyCashFlow = state.total.totalCashflow,
+                        currency = state.currency
+                    )
 
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .border(width = 2.dp, color = colorScheme.onBackground)
-            ) {
-                AssetsComponent(
-                    modifier = Modifier.weight(1f),
-                    savings = state.cashflow.savings,
-                    stocks = state.stocks,
-                    businesses = state.businesses,
-                    onSavingsChange = onSavingsChange,
-                    onUpsertStock = onUpsertStock,
-                    onDeleteStock = onDeleteStock,
-                    onUpsertBusiness = onUpsertBusiness,
-                    onDeleteBusiness = onDeleteBusiness
-                )
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .border(width = 2.dp, color = colorScheme.onBackground)
+                    ) {
+                        AssetsComponent(
+                            modifier = Modifier.weight(1f),
+                            savings = state.cashflow.savings,
+                            stocks = state.stocks,
+                            businesses = state.businesses,
+                            currency = state.currency,
+                            onSavingsChange = onSavingsChange,
+                            onUpsertStock = onUpsertStock,
+                            onDeleteStock = onDeleteStock,
+                            onUpsertBusiness = onUpsertBusiness,
+                            onDeleteBusiness = onDeleteBusiness
+                        )
 
-                LiabilitiesComponent(
-                    modifier = Modifier.weight(1f),
-                    totalLoan = state.total.totalLoan.toString(),
-                    liabilities = state.liabilities,
-                    stocks = state.stocks,
-                    businesses = state.businesses,
-                    onUpsertLiability = onUpsertLiability,
-                    onDeleteLiability = onDeleteLiability
-                )
+                        LiabilitiesComponent(
+                            modifier = Modifier.weight(1f),
+                            totalLoan = state.total.totalLoan.toString(),
+                            currency = state.currency,
+                            liabilities = state.liabilities,
+                            stocks = state.stocks,
+                            businesses = state.businesses,
+                            onUpsertLiability = onUpsertLiability,
+                            onDeleteLiability = onDeleteLiability
+                        )
+                    }
+                }
             }
         }
     }
@@ -239,7 +299,8 @@ private fun HomeScreenPreview() {
             onDeleteBusiness = {},
             onDeleteExpense = {},
             onDeleteLiability = {},
-            onDeleteStock = {}
+            onDeleteStock = {},
+            onUpdateCurrency = {}
         )
     }
 }

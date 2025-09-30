@@ -37,6 +37,7 @@ import com.cashflow.ui_model.cashflow.StockUI
 fun AddEditStockDialog(
     modifier: Modifier = Modifier,
     stock: StockUI,
+    currency: String,
     onDismiss: () -> Unit,
     onStockChange: (StockUI) -> Unit,
     onSuccess: () -> Unit,
@@ -148,7 +149,7 @@ fun AddEditStockDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -189,7 +190,7 @@ fun AddEditStockDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -230,7 +231,7 @@ fun AddEditStockDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold

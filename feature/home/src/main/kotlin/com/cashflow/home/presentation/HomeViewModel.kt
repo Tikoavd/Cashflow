@@ -6,6 +6,7 @@ import com.cashflow.home.domain.repository.HomeRepository
 import com.cashflow.home.domain.usecase.GetTotalUseCase
 import com.cashflow.mvi.MviBaseViewModel
 import com.cashflow.home.presentation.mvi.HomeAction
+import com.cashflow.home.presentation.mvi.HomeAction.*
 import com.cashflow.home.presentation.mvi.HomeEffect
 import com.cashflow.home.presentation.mvi.HomeIntent
 import com.cashflow.home.presentation.mvi.HomeReducer
@@ -27,47 +28,55 @@ class HomeViewModel(
 
     init {
         homeRepository.getCashflow().onEach {
-            onAction(HomeAction.UpdateCashflow(it))
+            onAction(UpdateCashflow(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
 
         homeRepository.getBusinesses().onEach {
-            onAction(HomeAction.UpdateBusinesses(it))
+            onAction(UpdateBusinesses(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
 
         homeRepository.getExpenses().onEach {
-            onAction(HomeAction.UpdateExpenses(it))
+            onAction(UpdateExpenses(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
 
         homeRepository.getLiabilities().onEach {
-            onAction(HomeAction.UpdateLiabilities(it))
+            onAction(UpdateLiabilities(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
 
         homeRepository.getStocks().onEach {
-            onAction(HomeAction.UpdateStocks(it))
+            onAction(UpdateStocks(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
 
         getTotalUseCase().onEach {
-            onAction(HomeAction.UpdateTotal(it))
+            onAction(UpdateTotal(it))
         }.launchIn(viewModelScope)
 
         viewState.map { it.cashflow }.debounce(500L).onEach {
             homeRepository.updateCashflow(it).flowOn(dispatchers.io).launchIn(viewModelScope)
         }.launchIn(viewModelScope)
+
+        homeRepository.getCurrency().onEach {
+            onAction(UpdateCurrency(it))
+        }.flowOn(dispatchers.io).launchIn(viewModelScope)
+
+        homeRepository.getCurrencyList().onEach {
+            onAction(UpdateCurrencies(it))
+        }.flowOn(dispatchers.io).launchIn(viewModelScope)
     }
 
     override fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.OnChildCountChange ->
-                onAction(HomeAction.UpdateChildCount(intent.childCount))
+                onAction(UpdateChildCount(intent.childCount))
 
             is HomeIntent.OnSalaryChange ->
-                onAction(HomeAction.UpdateSalary(intent.salary))
+                onAction(UpdateSalary(intent.salary))
 
             is HomeIntent.OnSavingsChange ->
-                onAction(HomeAction.UpdateSavings(intent.savings))
+                onAction(UpdateSavings(intent.savings))
 
             is HomeIntent.OnPerChildExpenseChange ->
-                onAction(HomeAction.UpdatePerChildExpense(intent.perChildExpense))
+                onAction(UpdatePerChildExpense(intent.perChildExpense))
 
             is HomeIntent.OnDeleteBusiness ->
                 homeRepository.deleteBusiness(intent.business).flowOn(dispatchers.io)
@@ -99,6 +108,10 @@ class HomeViewModel(
 
             is HomeIntent.OnUpsertStock ->
                 homeRepository.upsertStock(intent.stock).flowOn(dispatchers.io)
+                    .launchIn(viewModelScope)
+
+            is HomeIntent.OnUpdateCurrency ->
+                homeRepository.saveCurrency(intent.currency).flowOn(dispatchers.io)
                     .launchIn(viewModelScope)
         }
     }

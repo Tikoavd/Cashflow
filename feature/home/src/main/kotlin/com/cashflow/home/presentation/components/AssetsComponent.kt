@@ -45,6 +45,7 @@ fun AssetsComponent(
     savings: Int,
     stocks: SnapshotStateList<StockUI>,
     businesses: SnapshotStateList<BusinessUI>,
+    currency: String,
     onSavingsChange: (Int) -> Unit,
     onUpsertStock: (stock: StockUI) -> Unit,
     onDeleteStock: (stock: StockUI) -> Unit,
@@ -101,7 +102,7 @@ fun AssetsComponent(
                     decorationBox = { innerTextField ->
                         Row {
                             Text(
-                                text = "$",
+                                text = currency,
                                 style = typography.labelMedium.copy(
                                     color = colorScheme.onBackground,
                                     fontWeight = FontWeight.Bold
@@ -169,7 +170,7 @@ fun AssetsComponent(
                         modifier = Modifier.clickable { editStock = stock },
                         name = stock.name,
                         quantity = stock.quantity.toString(),
-                        price = "$" + stock.price
+                        price = currency + stock.price
                     )
                 }
                 if (stocks.size < 4) {
@@ -258,8 +259,8 @@ fun AssetsComponent(
                     StockBusinessComponent(
                         modifier = Modifier.clickable { editBusiness = business },
                         name = business.name,
-                        quantity = "$" + business.downPay,
-                        price = "$" + business.cost
+                        quantity = currency + business.downPay,
+                        price = currency + business.cost
                     )
                 }
                 if (businesses.size < 4) {
@@ -297,6 +298,7 @@ fun AssetsComponent(
     editStock?.let { stock ->
         AddEditStockDialog(
             stock = stock,
+            currency = currency,
             onDismiss = { editStock = null },
             onStockChange = { editStock = it },
             onSuccess = {
@@ -313,6 +315,7 @@ fun AssetsComponent(
     editBusiness?.let { business ->
         AddEditBusinessDialog(
             business = business,
+            currency = currency,
             onDismiss = { editBusiness = null },
             onBusinessChange = { editBusiness = it },
             onSuccess = {

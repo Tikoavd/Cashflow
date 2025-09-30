@@ -23,4 +23,6 @@ sealed interface HomeIntent : MviIntent {
     data class OnDeleteExpense(val expense: ExpenseUI): HomeIntent
     data class OnDeleteLiability(val liability: LiabilityUI): HomeIntent
     data class OnDeleteStock(val stock: StockUI): HomeIntent
+
+    data class OnUpdateCurrency(val currency: String): HomeIntent
 }

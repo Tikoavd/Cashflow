@@ -34,6 +34,7 @@ fun AuditorComponent(
     modifier: Modifier = Modifier,
     total: TotalUI,
     cashflow: CashflowUI,
+    currency: String,
     onChildCountChange: (childCount: Int) -> Unit,
     onPerChildExpenseChange: (perChildExpense: Int) -> Unit
 ) {
@@ -76,7 +77,7 @@ fun AuditorComponent(
                             )
                         )
                         Text(
-                            text = "$",
+                            text = currency,
                             style = typography.titleLarge.copy(
                                 color = colorScheme.onBackground,
                                 fontWeight = FontWeight.Bold
@@ -133,7 +134,7 @@ fun AuditorComponent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.titleLarge.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -274,7 +275,7 @@ fun AuditorComponent(
                                 ) {
                                     Row {
                                         Text(
-                                            text = "$",
+                                            text = currency,
                                             style = typography.titleLarge.copy(
                                                 color = colorScheme.onBackground,
                                                 fontWeight = FontWeight.Bold
@@ -323,7 +324,7 @@ fun AuditorComponent(
                     modifier = Modifier.weight(2f)
                 ) {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.titleLarge.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold

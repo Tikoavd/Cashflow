@@ -23,6 +23,7 @@ import com.cashflow.ui.R
 fun BalanceSheetHeader(
     modifier: Modifier = Modifier,
     monthlyCashFlow: Int,
+    currency: String
 ) {
     Row(
         modifier = modifier
@@ -67,7 +68,7 @@ fun BalanceSheetHeader(
             ) {
 
                 Text(
-                    text = "$",
+                    text = currency,
                     style = typography.titleLarge.copy(
                         color = colorScheme.onBackground,
                         fontWeight = FontWeight.Bold

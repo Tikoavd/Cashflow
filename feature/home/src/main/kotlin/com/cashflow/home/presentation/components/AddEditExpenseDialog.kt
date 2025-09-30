@@ -41,6 +41,7 @@ import com.cashflow.ui_model.cashflow.ExpenseUI
 fun AddEditExpenseDialog(
     modifier: Modifier = Modifier,
     expense: ExpenseUI,
+    currency: String,
     onDismiss: () -> Unit,
     onExpenseChange: (ExpenseUI) -> Unit,
     onSuccess: () -> Unit,
@@ -120,7 +121,7 @@ fun AddEditExpenseDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold

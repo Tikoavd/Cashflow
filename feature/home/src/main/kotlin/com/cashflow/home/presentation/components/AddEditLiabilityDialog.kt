@@ -37,6 +37,7 @@ import com.cashflow.ui_model.cashflow.LiabilityUI
 fun AddEditLiabilityDialog(
     modifier: Modifier = Modifier,
     liability: LiabilityUI,
+    currency: String,
     onDismiss: () -> Unit,
     onLiabilityChange: (LiabilityUI) -> Unit,
     onSuccess: () -> Unit,
@@ -116,7 +117,7 @@ fun AddEditLiabilityDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold
@@ -157,7 +158,7 @@ fun AddEditLiabilityDialog(
                 },
                 leadingIcon = {
                     Text(
-                        text = "$",
+                        text = currency,
                         style = typography.labelMedium.copy(
                             color = colorScheme.onBackground,
                             fontWeight = FontWeight.Bold

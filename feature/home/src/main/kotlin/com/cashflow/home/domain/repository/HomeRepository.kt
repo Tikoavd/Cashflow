@@ -36,4 +36,10 @@ interface HomeRepository {
     fun getStocks(): Flow<List<StockUI>>
 
     fun deleteStock(stock: StockUI): Flow<Unit>
+
+    fun getCurrency(): Flow<String>
+
+    fun saveCurrency(currency: String): Flow<Unit>
+
+    fun getCurrencyList(): Flow<List<String>>
 }

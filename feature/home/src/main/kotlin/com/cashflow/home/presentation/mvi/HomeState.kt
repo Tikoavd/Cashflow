@@ -19,5 +19,7 @@ data class HomeState(
     val liabilities: SnapshotStateList<LiabilityUI> = mutableStateListOf(),
     val stocks: SnapshotStateList<StockUI> = mutableStateListOf(),
     val total: TotalUI = TotalUI(),
+    val currency: String = "",
+    val currencies: SnapshotStateList<String> = mutableStateListOf(),
     val isLoading: Boolean = true
 ) : MviState

@@ -6,17 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -48,7 +42,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         viewModel.getAppLanguage()
         setContent {
-            UpdateSystemBars(isSystemInDarkTheme())
             val language by viewModel.language.collectAsStateWithLifecycle()
             val snackBarState = remember { SnackbarHostState() }
             viewModel.errors.collectWithLifeCycle { message ->
@@ -75,24 +68,17 @@ class MainActivity : ComponentActivity() {
                 darkTheme -> darkColorScheme()
                 else -> lightColorScheme()
             }
+            UpdateSystemBars(isSystemInDarkTheme(), colors.background)
             MaterialTheme(
                 colorScheme = colors
             ) {
-                Scaffold(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                ) { paddingValues ->
+                ) {
+                    RootNavHost()
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues)
-                    ) {
-                        RootNavHost()
-
-                        BoxSnackbarHost(hostState = snackBarState)
-                    }
-
+                    BoxSnackbarHost(hostState = snackBarState)
                 }
             }
         }
@@ -111,14 +97,15 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun UpdateSystemBars(
         darkMode: Boolean,
+        color: Color
     ) {
         val activity = (LocalContext.current as ComponentActivity)
         DisposableEffect(darkMode) {
             val barStyle = when (darkMode) {
-                true -> SystemBarStyle.dark(Color.Transparent.toArgb())
+                true -> SystemBarStyle.dark(color.toArgb())
                 false -> SystemBarStyle.light(
-                    Color.Transparent.toArgb(),
-                    Color.Transparent.toArgb()
+                    color.toArgb(),
+                    color.toArgb()
                 )
             }
             activity.enableEdgeToEdge(

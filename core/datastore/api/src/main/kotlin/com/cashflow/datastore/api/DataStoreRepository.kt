@@ -15,4 +15,8 @@ interface DataStoreRepository {
 
     @OptIn(InternalSerializationApi::class)
     fun saveCashflow(cashflow: CashflowDso): Flow<Unit>
+
+    fun getCurrency(): Flow<String>
+
+    fun saveCurrency(currency: String): Flow<Unit>
 }

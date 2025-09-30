@@ -43,6 +43,7 @@ import com.cashflow.ui_model.cashflow.StockUI
 fun LiabilitiesComponent(
     modifier: Modifier = Modifier,
     totalLoan: String,
+    currency: String,
     liabilities: SnapshotStateList<LiabilityUI>,
     stocks: SnapshotStateList<StockUI>,
     businesses: SnapshotStateList<BusinessUI>,
@@ -75,7 +76,7 @@ fun LiabilitiesComponent(
                         modifier = Modifier.clickable { editLiability = liability },
                         title = liability.name,
                         price = liability.cost.toString(),
-                        currency = "$"
+                        currency = currency
                     )
                 }
                 if (liabilities.size < 4) {
@@ -114,6 +115,90 @@ fun LiabilitiesComponent(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
+            Column(
+                modifier = modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp, horizontal = 8.dp),
+                    color = colorScheme.onBackground,
+                    thickness = 2.dp
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(2f)
+                            .padding(horizontal = 8.dp),
+                        text = stringResource(R.string.real_estate_business),
+                        style = typography.labelMedium.copy(
+                            color = colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp),
+                        text = stringResource(R.string.mortgage_liability),
+                        style = typography.labelMedium.copy(
+                            color = colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp, horizontal = 8.dp),
+                    color = colorScheme.onBackground,
+                    thickness = 2.dp
+                )
+
+                val emptySize by remember(stocks, businesses) {
+                    derivedStateOf {
+                        5 - (stocks.count { it.mortgage > 0 } + businesses.count { it.mortgage > 0 })
+                    }
+                }
+
+                LazyColumn {
+                    items(stocks) { stock ->
+                        if (stock.mortgage != 0) {
+                            TitlePriceItem(
+                                title = stock.name,
+                                price = stock.mortgage.toString(),
+                                currency = currency
+                            )
+                        }
+                    }
+
+                    items(businesses) { business ->
+                        if (business.mortgage != 0) {
+                            TitlePriceItem(
+                                title = business.name,
+                                price = business.mortgage.toString(),
+                                currency = currency
+                            )
+                        }
+                    }
+
+                    if (emptySize > 1) {
+                        items(emptySize) {
+                            TitlePriceItem()
+                        }
+                    } else {
+                        item {
+                            TitlePriceItem()
+                        }
+                    }
+                }
+            }
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,119 +206,40 @@ fun LiabilitiesComponent(
                 color = colorScheme.onBackground,
                 thickness = 2.dp
             )
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     modifier = Modifier
                         .weight(2f)
                         .padding(horizontal = 8.dp),
-                    text = stringResource(R.string.real_estate_business),
-                    style = typography.labelMedium.copy(
-                        color = colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    )
+                    text = stringResource(R.string.loan),
+                    style = typography.labelMedium.copy(color = colorScheme.onBackground)
                 )
 
-                Text(
+                Row(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 8.dp),
-                    text = stringResource(R.string.mortgage_liability),
-                    style = typography.labelMedium.copy(
-                        color = colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-            }
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp, horizontal = 8.dp),
-                color = colorScheme.onBackground,
-                thickness = 2.dp
-            )
-
-            val emptySize by remember(stocks, businesses) {
-                derivedStateOf {
-                    5 - (stocks.count { it.mortgage > 0 } + businesses.count { it.mortgage > 0 })
-                }
-            }
-
-            LazyColumn {
-                items(stocks) { stock ->
-                    if (stock.mortgage != 0) {
-                        TitlePriceItem(
-                            title = stock.name,
-                            price = stock.mortgage.toString(),
-                            currency = "$"
+                        .padding(horizontal = 8.dp)
+                ) {
+                    if (totalLoan.isNotEmpty()) {
+                        Text(
+                            text = currency,
+                            style = typography.labelMedium.copy(color = colorScheme.onBackground),
+                            textAlign = TextAlign.Center
                         )
+                        Spacer(Modifier.width(4.dp))
                     }
-                }
-
-                items(businesses) { business ->
-                    if (business.mortgage != 0) {
-                        TitlePriceItem(
-                            title = business.name,
-                            price = business.mortgage.toString(),
-                            currency = "$"
-                        )
-                    }
-                }
-
-                if (emptySize > 1) {
-                    items(emptySize) {
-                        TitlePriceItem()
-                    }
-                } else {
-                    item {
-                        TitlePriceItem()
-                    }
-                }
-            }
-        }
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 8.dp),
-            color = colorScheme.onBackground,
-            thickness = 2.dp
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                modifier = Modifier
-                    .weight(2f)
-                    .padding(horizontal = 8.dp),
-                text = stringResource(R.string.loan),
-                style = typography.labelMedium.copy(color = colorScheme.onBackground)
-            )
-
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp)
-            ) {
-                if (totalLoan.isNotEmpty()) {
                     Text(
-                        text = "$",
+                        modifier = Modifier.fillMaxWidth(),
+                        text = totalLoan,
                         style = typography.labelMedium.copy(color = colorScheme.onBackground),
                         textAlign = TextAlign.Center
                     )
-                    Spacer(Modifier.width(4.dp))
                 }
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = totalLoan,
-                    style = typography.labelMedium.copy(color = colorScheme.onBackground),
-                    textAlign = TextAlign.Center
-                )
             }
         }
     }
@@ -241,6 +247,7 @@ fun LiabilitiesComponent(
     editLiability?.let { liability ->
         AddEditLiabilityDialog(
             liability = liability,
+            currency = currency,
             onDismiss = { editLiability = null },
             onLiabilityChange = { editLiability = it },
             onSuccess = {

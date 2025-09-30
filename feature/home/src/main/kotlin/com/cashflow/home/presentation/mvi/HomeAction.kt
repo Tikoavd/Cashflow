@@ -21,4 +21,8 @@ sealed interface HomeAction : MviAction {
     data class UpdateLiabilities(val liabilities: List<LiabilityUI>): HomeAction
     data class UpdateStocks(val stocks: List<StockUI>): HomeAction
     data class UpdateTotal(val total: TotalUI): HomeAction
+
+    data class UpdateCurrency(val currency: String): HomeAction
+
+    data class UpdateCurrencies(val currencies: List<String>): HomeAction
 }

@@ -39,4 +39,10 @@ class DataStoreRepositoryImpl(
     override fun saveCashflow(cashflow: CashflowDso): Flow<Unit> = emitFlow {
         dataStoreService.saveCashflow(json.encodeToString(cashflow))
     }
+
+    override fun getCurrency(): Flow<String> = dataStoreService.getCurrency()
+
+    override fun saveCurrency(currency: String): Flow<Unit> = emitFlow {
+        dataStoreService.saveCurrency(currency)
+    }
 }

@@ -49,5 +49,13 @@ class HomeReducer : Reducer<HomeAction, HomeState> {
             is HomeAction.UpdateCashflow -> state.copy(
                 cashflow = action.cashflow
             )
+
+            is HomeAction.UpdateCurrency -> state.copy(
+                currency = action.currency
+            )
+
+            is HomeAction.UpdateCurrencies -> state.copy(
+                currencies = action.currencies.toMutableStateList()
+            )
         }
 }

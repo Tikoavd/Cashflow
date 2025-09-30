@@ -33,6 +33,7 @@ import com.cashflow.ui_model.cashflow.LiabilityUI
 fun ExpensesComponent(
     modifier: Modifier = Modifier,
     childExpenses: Int,
+    currency: String,
     expenses: SnapshotStateList<ExpenseUI>,
     liabilities: SnapshotStateList<LiabilityUI>,
     onUpsertExpense: (expense: ExpenseUI) -> Unit,
@@ -58,7 +59,7 @@ fun ExpensesComponent(
                     TitlePriceItem(
                         title = stringResource(R.string.child_expenses),
                         price = childExpenses.toString(),
-                        currency = "$"
+                        currency = currency
                     )
                 }
             }
@@ -67,7 +68,7 @@ fun ExpensesComponent(
                     TitlePriceItem(
                         title = liability.name,
                         price = liability.payment.toString(),
-                        currency = "$"
+                        currency = currency
                     )
                 }
             }
@@ -76,7 +77,7 @@ fun ExpensesComponent(
                     modifier = Modifier.clickable { editExpense = expense },
                     title = expense.name,
                     price = expense.expense.toString(),
-                    currency = "$"
+                    currency = currency
                 )
             }
             if (liabilities.size + expenses.size < 4) {
@@ -113,6 +114,7 @@ fun ExpensesComponent(
     editExpense?.let { expense ->
         AddEditExpenseDialog(
             expense = expense,
+            currency = currency,
             onDismiss = { editExpense = null },
             onExpenseChange = { editExpense = it },
             onSuccess = {
