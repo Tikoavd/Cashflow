@@ -10,6 +10,7 @@ import com.cashflow.ui_model.cashflow.ExpenseUI
 import com.cashflow.ui_model.cashflow.LiabilityUI
 import com.cashflow.ui_model.cashflow.StockUI
 import com.cashflow.ui_model.cashflow.TotalUI
+import com.cashflow.ui_model.language.AppLanguageUI
 
 @Immutable
 data class HomeState(
@@ -21,5 +22,6 @@ data class HomeState(
     val total: TotalUI = TotalUI(),
     val currency: String = "",
     val currencies: SnapshotStateList<String> = mutableStateListOf(),
+    val appLanguage: AppLanguageUI = AppLanguageUI.EN,
     val isLoading: Boolean = true
 ) : MviState

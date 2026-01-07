@@ -16,7 +16,7 @@
     <string name="expense">РАСХОД</string>
     <string name="payment">Платеж:</string>
     <string name="child_expenses">Расходы на детей:</string>
-    <string name="balance_sheet_header">BALANCE SHEET</string>
+    <string name="balance_sheet_header">ОТЧЕТ О БАЛАНСЕ</string>
     <string name="assets">АКТИВЫ</string>
     <string name="liabilities">ОБЯЗАТЕЛЬСТВА</string>
     <string name="savings">Сбережения:</string>

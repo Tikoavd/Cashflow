@@ -57,5 +57,9 @@ class HomeReducer : Reducer<HomeAction, HomeState> {
             is HomeAction.UpdateCurrencies -> state.copy(
                 currencies = action.currencies.toMutableStateList()
             )
+
+            is HomeAction.UpdateLanguage -> state.copy(
+                appLanguage = action.appLanguage
+            )
         }
 }

@@ -11,6 +11,10 @@ import com.cashflow.home.presentation.mvi.HomeEffect
 import com.cashflow.home.presentation.mvi.HomeIntent
 import com.cashflow.home.presentation.mvi.HomeReducer
 import com.cashflow.home.presentation.mvi.HomeState
+import com.cashflow.middleware.api.usecase.GetAppLanguageUseCase
+import com.cashflow.middleware.api.usecase.SaveAppLanguageUseCase
+import com.cashflow.ui_model.language.toModel
+import com.cashflow.ui_model.language.toUI
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -21,8 +25,10 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class HomeViewModel(
     private val homeRepository: HomeRepository,
+    private val saveAppLanguageUseCase: SaveAppLanguageUseCase,
     private val dispatchers: DispatchersProvider,
     getTotalUseCase: GetTotalUseCase,
+    getAppLanguageUseCase: GetAppLanguageUseCase,
     reducer: HomeReducer
 ) : MviBaseViewModel<HomeState, HomeAction, HomeIntent, HomeEffect>(HomeState(), reducer) {
 
@@ -62,6 +68,10 @@ class HomeViewModel(
         homeRepository.getCurrencyList().onEach {
             onAction(UpdateCurrencies(it))
         }.flowOn(dispatchers.io).launchIn(viewModelScope)
+
+        getAppLanguageUseCase().onEach {
+            onAction(UpdateLanguage(it.toUI()))
+        }.launchIn(viewModelScope)
     }
 
     override fun handleIntent(intent: HomeIntent) {
@@ -113,6 +123,9 @@ class HomeViewModel(
             is HomeIntent.OnUpdateCurrency ->
                 homeRepository.saveCurrency(intent.currency).flowOn(dispatchers.io)
                     .launchIn(viewModelScope)
+
+            is HomeIntent.OnLanguageClick ->
+                saveAppLanguageUseCase(intent.language.toModel()).launchIn(viewModelScope)
         }
     }
 }

@@ -8,6 +8,7 @@ import com.cashflow.ui_model.cashflow.ExpenseUI
 import com.cashflow.ui_model.cashflow.LiabilityUI
 import com.cashflow.ui_model.cashflow.StockUI
 import com.cashflow.ui_model.cashflow.TotalUI
+import com.cashflow.ui_model.language.AppLanguageUI
 
 @Stable
 sealed interface HomeAction : MviAction {
@@ -25,4 +26,6 @@ sealed interface HomeAction : MviAction {
     data class UpdateCurrency(val currency: String): HomeAction
 
     data class UpdateCurrencies(val currencies: List<String>): HomeAction
+
+    data class UpdateLanguage(val appLanguage: AppLanguageUI): HomeAction
 }

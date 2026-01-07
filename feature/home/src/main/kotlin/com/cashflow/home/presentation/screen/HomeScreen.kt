@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +61,7 @@ import com.cashflow.ui_model.cashflow.BusinessUI
 import com.cashflow.ui_model.cashflow.ExpenseUI
 import com.cashflow.ui_model.cashflow.LiabilityUI
 import com.cashflow.ui_model.cashflow.StockUI
+import com.cashflow.ui_model.language.AppLanguageUI
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -93,7 +93,8 @@ fun HomeRoute() {
         onDeleteExpense = { expense -> viewModel.onIntent(HomeIntent.OnDeleteExpense(expense)) },
         onDeleteLiability = { liability -> viewModel.onIntent(HomeIntent.OnDeleteLiability(liability)) },
         onDeleteStock = { stock -> viewModel.onIntent(HomeIntent.OnDeleteStock(stock)) },
-        onUpdateCurrency = { currency -> viewModel.onIntent(HomeIntent.OnUpdateCurrency(currency)) }
+        onUpdateCurrency = { currency -> viewModel.onIntent(HomeIntent.OnUpdateCurrency(currency)) },
+        onSelectLanguage = { language -> viewModel.onIntent(HomeIntent.OnLanguageClick(language)) }
     )
 }
 
@@ -114,11 +115,9 @@ fun HomeScreen(
     onDeleteExpense: (expense: ExpenseUI) -> Unit,
     onDeleteLiability: (liability: LiabilityUI) -> Unit,
     onDeleteStock: (stock: StockUI) -> Unit,
-    onUpdateCurrency: (currency: String) -> Unit
+    onUpdateCurrency: (currency: String) -> Unit,
+    onSelectLanguage: (language: AppLanguageUI) -> Unit
 ) {
-
-    val config = LocalConfiguration.current
-
     var screenWidth by remember { mutableIntStateOf(0) }
     var screenHeight by remember { mutableIntStateOf(0) }
 
@@ -144,14 +143,12 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             HomeTopBar(
-                modifier = Modifier.windowInsetsPadding(
-                    WindowInsets.systemBars.only(
-                        WindowInsetsSides.Horizontal + WindowInsetsSides.Top
-                    )
-                ),
+                modifier = Modifier,
                 currencies = state.currencies,
                 selectedCurrency = state.currency,
-                onUpdateCurrency = onUpdateCurrency
+                appLanguage = state.appLanguage,
+                onUpdateCurrency = onUpdateCurrency,
+                onSelectLanguage = onSelectLanguage
             )
         },
         containerColor = colorScheme.background,
@@ -300,7 +297,8 @@ private fun HomeScreenPreview() {
             onDeleteExpense = {},
             onDeleteLiability = {},
             onDeleteStock = {},
-            onUpdateCurrency = {}
+            onUpdateCurrency = {},
+            onSelectLanguage = {}
         )
     }
 }

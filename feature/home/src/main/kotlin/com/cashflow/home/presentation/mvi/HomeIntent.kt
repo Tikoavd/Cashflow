@@ -8,6 +8,7 @@ import com.cashflow.ui_model.cashflow.ExpenseUI
 import com.cashflow.ui_model.cashflow.LiabilityUI
 import com.cashflow.ui_model.cashflow.StockUI
 import com.cashflow.ui_model.cashflow.TotalUI
+import com.cashflow.ui_model.language.AppLanguageUI
 
 @Stable
 sealed interface HomeIntent : MviIntent {
@@ -25,4 +26,6 @@ sealed interface HomeIntent : MviIntent {
     data class OnDeleteStock(val stock: StockUI): HomeIntent
 
     data class OnUpdateCurrency(val currency: String): HomeIntent
+
+    data class OnLanguageClick(val language: AppLanguageUI) : HomeIntent
 }
